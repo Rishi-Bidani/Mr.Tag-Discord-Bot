@@ -19,7 +19,8 @@ class db {
         } catch (error) {
             await knex.schema.createTable("tags", table => {
                 table.increments();
-                table.string("tagname");
+                table.string("tagname").unique();
+                table.string("content")
                 table.string("createdby");
                 table.timestamps();
                 table.string("aliases");
@@ -27,15 +28,23 @@ class db {
         }
     }
 
-    static async insertIntoTableTag(tagname, createdby, aliases) {
+    static async insertIntoTableTag(tagname, content, createdby, aliases) {
         try {
             const newtag = {
                 tagname,
+                content,
                 createdby,
                 created_at: new Date(),
                 aliases
             }
-            await knex("tags").insert(newtag);
+            return await knex("tags").insert(newtag);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    static async getTag(tagname) {
+        try {
+            return await knex("tags").where("tagname", tagname).first()
         } catch (error) {
             console.log(error)
         }

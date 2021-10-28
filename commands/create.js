@@ -20,67 +20,29 @@ module.exports = {
     // }),
     async execute(interaction) {
         const tagname = interaction.options.getString("tagname");
-        // const tagContent = interaction.options.getString("content");
-        let tagContent;
         const author = interaction.member.user.id
 
-        // await db.insertIntoTableTag(tagname, )
-        // await interaction.deferReply();
         const filter = m => m.author.id === author;
-        // const collector = await interaction.channel.createMessageCollector({
-        //     firstMessage,
-        //     time: 30000,
-        //     max: 2
-        // });
 
-        // try {
-        //     await interaction.reply(tagname, { fetchReply: true })
-
-        //     const collected = await interaction.channel
-        //         .awaitMessages(filter, { max: 1, time: 30000, errors: ['time'] });
-        //     interaction.followUp(collected.first());
-        // } catch (error) {
-        //     await interaction.followUp(error);
-        // }
-
-        interaction.reply(tagname, { fetchReply: true })
+        interaction
+            .reply(tagname, { fetchReply: true })
             .then(() => {
                 interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors: ['time'] })
-                    .then(collected => {
-                        console.log(collected.first())
-                        interaction.followUp(`${collected.first()}`);
+                    .then(async collected => {
+                        try {
+                            const message = await collected.first();
+                            const response = await db.insertIntoTableTag(tagname, message.content, author, "")
+                            console.log(message.content);
+                            await interaction.followUp(`Tag: ${tagname}\n${message.content}`);
+
+                        } catch (error) {
+                            console.log(error)
+                        }
                     })
-                    .catch(collected => {
-                        interaction.followUp('');
+                    .catch(err => {
+                        console.log(err)
+                        interaction.followUp("error");
                     });
             });
-        // collector.on('collect', async m => {
-        //     // console.log(`Collected ${m.content}`);
-        //     tagContent = await m
-        //     console.log(await tagContent.content);
-
-        //     // await wait(30000);
-        //     await interaction.editReply({
-        //         content: `Creating ${tagname}`,
-        //         ephemeral: false
-        //     })
-        // });
-        // collector.on('end', async collected => {
-        //     console.log(`Collected ${await collected.first(), collected.size} items`);
-        //     await interaction.followUp(`Created ${tagname}\n${tagContent}`)
-        // });
-
-
-
-        // await interaction.reply({
-        //     content: `Created ${tagname}`,
-        //     ephemeral: false
-        // })
-
-
-        // await interaction.followUp({
-        //     content: firstMessage,
-        //     ephemeral: false
-        // })
     }
 }
