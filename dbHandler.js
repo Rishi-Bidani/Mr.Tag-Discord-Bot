@@ -60,6 +60,18 @@ class db {
             console.log(error)
         }
     }
+    static async setAlias(alias, tagname, author,) {
+        try {
+            const aliasDetails = {
+                aliasname: alias,
+                tagname,
+                createdby: author,
+            }
+            return await knex("aliases").insert(aliasDetails);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 module.exports = db
