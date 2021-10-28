@@ -51,59 +51,10 @@ client.once('ready', async () => {
             if (err) console.log(err)
         }
     })()
-    // const guild = client.guilds.cache.get(guildId);
-    // let commands;
-
-    // if (guild) {
-    //     commands = guild.commands;
-    // } else {
-    //     commands = client.application?.commands;
-    // }
-
-    // commands.create({
-    //     name: "ping",
-    //     description: "Replies pong!!"
-    // });
-
-    // commands.create({
-    //     name: "add",
-    //     description: "Adds 2 numbers",
-    //     options: [
-    //         {
-    //             name: "num1",
-    //             description: "Number 1",
-    //             required: true,
-    //             type: Constants.ApplicationCommandOptionTypes.NUMBER
-    //         },
-    //         {
-    //             name: "num2",
-    //             description: "Number 2",
-    //             required: true,
-    //             type: Constants.ApplicationCommandOptionTypes.NUMBER
-    //         }
-    //     ]
-    // })
-
 });
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
-
-    // const { commandName, options } = interaction;
-
-    // if (commandName === "ping") {
-    //     interaction.reply({
-    //         content: "pong",
-    //         ephemeral: false
-    //     })
-    // } else if (commandName === "add") {
-    //     const num1 = options.getNumber("num1") || 0;
-    //     const num2 = options.getNumber("num2") || 0;
-    //     interaction.reply({
-    //         content: `The sum is ${num1 + num2}`,
-    //         ephemeral: false
-    //     })
-    // }
 
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
