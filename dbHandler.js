@@ -25,6 +25,14 @@ class db {
                 table.timestamps();
                 table.string("aliases");
             })
+
+            await knex.schema.createTable("aliases", table => {
+                table.increments();
+                table.string("aliasname").unique();
+                table.string("tagname");
+                table.string("createdby");
+                table.timestamps();
+            })
         }
     }
 
@@ -37,6 +45,7 @@ class db {
                 created_at: new Date(),
                 aliases
             }
+            await knex("aliases").insert({ aliasname: tagname, tagname, createdby, created_at: new Date() })
             return await knex("tags").insert(newtag);
         } catch (error) {
             console.log(error)
@@ -44,7 +53,9 @@ class db {
     }
     static async getTag(tagname) {
         try {
-            return await knex("tags").where("tagname", tagname).first()
+            const aliasDetails = await knex("aliases").where("aliasname", tagname).first();
+            console.log(aliasDetails.tagname);
+            return await knex("tags").where("tagname", aliasDetails.tagname).first();
         } catch (error) {
             console.log(error)
         }
