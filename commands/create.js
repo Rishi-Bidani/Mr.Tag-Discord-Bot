@@ -12,12 +12,7 @@ module.exports = {
                 .setDescription("New tag name")
                 .setRequired(true)
         }),
-    // .addStringOption(option => {
-    //     return option
-    //         .setName("content")
-    //         .setDescription("New tags content")
-    //         .setRequired(true)
-    // }),
+
     async execute(interaction) {
         const tagname = interaction.options.getString("tagname");
         const author = interaction.member.user.id

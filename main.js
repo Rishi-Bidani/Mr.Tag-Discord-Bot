@@ -19,7 +19,7 @@ const client = new Client({
 const TOKEN = process.env['TOKEN'];
 const GUILD_ID = process.env['GUILD_ID'];
 
-
+// The following arrat holds the commands
 const commands = [];
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -34,6 +34,9 @@ client.once('ready', async () => {
     console.log('Ready!');
     const CLIENT_ID = client.user.id;
     const rest = new REST({ version: "9" }).setToken(TOKEN);
+    // Asynchronouly check if the bot is in production or development
+    // Production => register commands globally
+    // Development => register commands locally
     (async () => {
         try {
             if (process.env.ENV === "production") {
@@ -56,9 +59,11 @@ client.once('ready', async () => {
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
 
+    // check if the command name actually exists as a command
     const command = client.commands.get(interaction.commandName);
-    if (!command) return;
+    if (!command) return; // if not, break
 
+    // If the command exists, run it
     try {
         await command.execute(interaction);
     } catch (error) {

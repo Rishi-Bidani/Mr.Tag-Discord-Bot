@@ -11,6 +11,11 @@ module.exports = {
                 .setName("tagname")
                 .setDescription("which tag to read")
                 .setRequired(true)
+        })
+        .addUserOption(option => {
+            return option
+                .setName("user")
+                .setDescription("who to read the tag for")
         }),
     async execute(interaction) {
         const tagname = interaction.options.getString("tagname");
